@@ -29,6 +29,10 @@ func parseExitCommand(args []string) {
 	os.Exit(exitCode)
 }
 
+func parseEchoCommand(args []string) {
+	fmt.Fprintln(os.Stdout, strings.Join(args, " "))
+}
+
 func main() {
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
@@ -44,6 +48,8 @@ func main() {
 		switch command {
 		case "exit":
 			parseExitCommand(args)
+		case "echo":
+			parseEchoCommand(args)
 		default:
 			result := fmt.Sprintf("%s: command not found\n", command)
 			fmt.Fprint(os.Stderr, result)
