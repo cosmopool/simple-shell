@@ -6,6 +6,6 @@ import (
 	"strings"
 )
 
-func parseEchoCommand(args []string) {
+func executeEchoCommand(args []string) {
 	fmt.Fprintln(os.Stdout, strings.Join(args, " "))
 }

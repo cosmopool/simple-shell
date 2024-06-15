@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func parseExitCommand(args []string) {
+func executeExitCommand(args []string) {
 	var exitCode int
 
 	if len(args) == 0 {

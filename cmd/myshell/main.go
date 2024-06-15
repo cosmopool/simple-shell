@@ -35,9 +35,9 @@ func main() {
 		command := getCommandFromInput(rawInput)
 		switch command.name {
 		case "exit":
-			parseExitCommand(command.args)
+			executeExitCommand(command.args)
 		case "echo":
-			parseEchoCommand(command.args)
+			executeEchoCommand(command.args)
 		default:
 			result := fmt.Sprintf("%s: command not found\n", command.name)
 			fmt.Fprint(os.Stderr, result)
