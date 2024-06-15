@@ -22,7 +22,7 @@ func main() {
 		if command == "exit" {
 			os.Exit(0)
 		}
-		result := fmt.Sprintf("%s: command not found", command)
+		result := fmt.Sprintf("%s: command not found\n", command)
 		os.Stderr.Write([]byte(result))
 	}
 }
