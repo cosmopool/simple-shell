@@ -7,10 +7,19 @@ import (
 	"strings"
 )
 
-// Returns ([command], [arguments]) from input
-func getArgumentsFromInput(input string) (string, []string) {
+type Command struct {
+	name string
+	args []string
+}
+
+// Returns a [Command] from input string
+func getCommandFromInput(input string) Command {
+	input = strings.Trim(input, "\n")
 	args := strings.Split(input, " ")
-	return args[0], args[1:]
+	return Command{
+		name: args[0],
+		args: args[1:],
+	}
 }
 
 func main() {
@@ -23,15 +32,14 @@ func main() {
 			os.Exit(1)
 		}
 
-		input := strings.Trim(rawInput, "\n")
-		command, args := getArgumentsFromInput(input)
-		switch command {
+		command := getCommandFromInput(rawInput)
+		switch command.name {
 		case "exit":
-			parseExitCommand(args)
+			parseExitCommand(command.args)
 		case "echo":
-			parseEchoCommand(args)
+			parseEchoCommand(command.args)
 		default:
-			result := fmt.Sprintf("%s: command not found\n", command)
+			result := fmt.Sprintf("%s: command not found\n", command.name)
 			fmt.Fprint(os.Stderr, result)
 		}
 	}
