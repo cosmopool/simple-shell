@@ -4,11 +4,25 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
-func main() {
+// Returns ([command], [arguments]) from input
+func getArgumentsFromCommand(input string) (string, []string) {
+	args := strings.Split(input, " ")
+	return args[0], args[1:]
+}
 
+func parseExitCommand(args []string) (int, error) {
+	exitCode, err := strconv.Atoi(args[0])
+	if err != nil {
+		return 1, err
+	}
+	return exitCode, nil
+}
+
+func main() {
 	for {
 		fmt.Fprint(os.Stdout, "$ ")
 		// Wait for user input
@@ -18,9 +32,15 @@ func main() {
 			os.Exit(1)
 		}
 
-		command := strings.Trim(rawInput, "\n")
+		input := strings.Trim(rawInput, "\n")
+		command, args := getArgumentsFromCommand(input)
 		if command == "exit" {
-			os.Exit(0)
+			exitCode, err := parseExitCommand(args)
+			if err != nil {
+				fmt.Fprint(os.Stderr, err)
+				os.Exit(exitCode)
+			}
+			os.Exit(exitCode)
 		}
 		result := fmt.Sprintf("%s: command not found\n", command)
 		fmt.Fprint(os.Stderr, result)
