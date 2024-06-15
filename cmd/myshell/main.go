@@ -7,18 +7,33 @@ import (
 	"strings"
 )
 
+func getBuiltinCommands() [3]string {
+	return [...]string{"exit", "echo", "type"}
+}
+
 type Command struct {
 	name string
 	args []string
 }
 
+func writeToStderr(errorString string) {
+	_, err := fmt.Fprint(os.Stderr, errorString)
+	if err != nil {
+		msg := fmt.Sprintf("%v ocurred when trying to write %v to STDERR.", err, errorString)
+		panic(msg)
+	}
+}
+
 // Returns a [Command] from input string
 func getCommandFromInput(input string) Command {
 	input = strings.Trim(input, "\n")
-	args := strings.Split(input, " ")
+	allArguments := strings.Split(input, " ")
+	name := allArguments[0]
+	args := allArguments[1:]
+
 	return Command{
-		name: args[0],
-		args: args[1:],
+		name: name,
+		args: args,
 	}
 }
 
@@ -38,9 +53,11 @@ func main() {
 			executeExitCommand(command.args)
 		case "echo":
 			executeEchoCommand(command.args)
+		case "type":
+			executeTypeCommand(command.args)
 		default:
 			result := fmt.Sprintf("%s: command not found\n", command.name)
-			fmt.Fprint(os.Stderr, result)
+			writeToStderr(result)
 		}
 	}
 }
