@@ -8,7 +8,7 @@ import (
 )
 
 // Returns ([command], [arguments]) from input
-func getArgumentsFromCommand(input string) (string, []string) {
+func getArgumentsFromInput(input string) (string, []string) {
 	args := strings.Split(input, " ")
 	return args[0], args[1:]
 }
@@ -24,7 +24,7 @@ func main() {
 		}
 
 		input := strings.Trim(rawInput, "\n")
-		command, args := getArgumentsFromCommand(input)
+		command, args := getArgumentsFromInput(input)
 		switch command {
 		case "exit":
 			parseExitCommand(args)
