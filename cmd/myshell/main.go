@@ -14,12 +14,13 @@ func getArgumentsFromCommand(input string) (string, []string) {
 	return args[0], args[1:]
 }
 
-func parseExitCommand(args []string) (int, error) {
+func parseExitCommand(args []string) {
 	exitCode, err := strconv.Atoi(args[0])
 	if err != nil {
-		return 1, err
+		fmt.Fprint(os.Stderr, err)
+		os.Exit(exitCode)
 	}
-	return exitCode, nil
+	os.Exit(exitCode)
 }
 
 func main() {
@@ -34,15 +35,12 @@ func main() {
 
 		input := strings.Trim(rawInput, "\n")
 		command, args := getArgumentsFromCommand(input)
-		if command == "exit" {
-			exitCode, err := parseExitCommand(args)
-			if err != nil {
-				fmt.Fprint(os.Stderr, err)
-				os.Exit(exitCode)
-			}
-			os.Exit(exitCode)
+		switch command {
+		case "exit":
+			parseExitCommand(args)
+		default:
+			result := fmt.Sprintf("%s: command not found\n", command)
+			fmt.Fprint(os.Stderr, result)
 		}
-		result := fmt.Sprintf("%s: command not found\n", command)
-		fmt.Fprint(os.Stderr, result)
 	}
 }
