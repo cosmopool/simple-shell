@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -12,25 +11,6 @@ import (
 func getArgumentsFromCommand(input string) (string, []string) {
 	args := strings.Split(input, " ")
 	return args[0], args[1:]
-}
-
-func parseExitCommand(args []string) {
-	var exitCode int
-
-	if len(args) == 0 {
-		os.Exit(0)
-	}
-
-	exitCode, err := strconv.Atoi(args[0])
-	if err != nil {
-		fmt.Fprint(os.Stderr, err)
-		os.Exit(exitCode)
-	}
-	os.Exit(exitCode)
-}
-
-func parseEchoCommand(args []string) {
-	fmt.Fprintln(os.Stdout, strings.Join(args, " "))
 }
 
 func main() {
