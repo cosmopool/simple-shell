@@ -23,6 +23,6 @@ func main() {
 			os.Exit(0)
 		}
 		result := fmt.Sprintf("%s: command not found\n", command)
-		os.Stderr.Write([]byte(result))
+		fmt.Fprint(os.Stderr, result)
 	}
 }
