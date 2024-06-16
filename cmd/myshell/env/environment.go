@@ -18,7 +18,7 @@ type Environment struct {
 }
 
 // Set shell environment variables
-func SetEnvironment() {
+func SetSessionEnvironment() {
 	SessionEnv = Environment{
 		Path: strings.Split(os.Getenv(PATH), ":"),
 		Pwd:  os.Getenv(PWD),

@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	env.SetEnvironment()
+	env.SetSessionEnvironment()
 
 	for {
 		writeToStdout("$ ")
