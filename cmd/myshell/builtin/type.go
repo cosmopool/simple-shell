@@ -1,4 +1,4 @@
-package main
+package builtin
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ func executeTypeCommand(args []string) {
 	// check if is a builtin commandToCheck
 	commandToCheck := args[0]
 	isBuiltin := false
-	for _, builtinCommand := range getBuiltinCommands() {
+	for _, builtinCommand := range GetBuiltinCommands() {
 		if commandToCheck == builtinCommand {
 			isBuiltin = true
 			break
@@ -26,7 +26,7 @@ func executeTypeCommand(args []string) {
 	}
 
 	// check non-builtin command
-	commandPath, err := getCommandPath(Command{name: commandToCheck})
+	commandPath, err := getCommandPath(Command{Name: commandToCheck})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, commandToCheck+": not found")
 		return

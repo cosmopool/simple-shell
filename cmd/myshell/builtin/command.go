@@ -1,21 +1,23 @@
-package main
+package builtin
 
 import (
 	"os"
 	"strings"
+
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/env"
 )
 
 type BuiltinCommandFunction func(args []string)
 
 type Command struct {
-	name      string
-	args      []string
-	isBuiltin bool
-	execute   BuiltinCommandFunction
+	Name      string
+	Args      []string
+	IsBuiltin bool
+	Execute   BuiltinCommandFunction
 }
 
 // Returns a [Command] from input string
-func getCommandFromInput(input string) Command {
+func GetCommandFromInput(input string) Command {
 	input = strings.Trim(input, "\n")
 	allArguments := strings.Split(input, " ")
 	name := allArguments[0]
@@ -36,22 +38,23 @@ func getCommandFromInput(input string) Command {
 	}
 
 	return Command{
-		name:      name,
-		args:      args,
-		isBuiltin: isBuiltin,
-		execute:   builtinFunction,
+		Name:      name,
+		Args:      args,
+		IsBuiltin: isBuiltin,
+		Execute:   builtinFunction,
 	}
 }
 
-func getBuiltinCommands() [3]string {
+// List of all builtin commands
+func GetBuiltinCommands() [3]string {
 	return [...]string{"exit", "echo", "type"}
 }
 
 func getCommandPath(command Command) (string, error) {
 	var pathToCommand string
 
-	for _, basePath := range environment.path {
-		pathToCommand = basePath + string(os.PathSeparator) + command.name
+	for _, basePath := range env.SessionEnv.Path {
+		pathToCommand = basePath + string(os.PathSeparator) + command.Name
 
 		_, err := os.Stat(pathToCommand)
 		if err != nil {

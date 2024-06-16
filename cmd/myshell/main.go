@@ -4,10 +4,14 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/builtin"
+	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/env"
 )
 
 func main() {
-	setEnvironment()
+	env.SetEnvironment()
+
 	for {
 		writeToStdout("$ ")
 		// wait for user input
@@ -17,15 +21,15 @@ func main() {
 			continue
 		}
 
-		command := getCommandFromInput(input)
+		command := builtin.GetCommandFromInput(input)
 		// execute builtin command
-		if command.isBuiltin {
-			command.execute(command.args)
+		if command.IsBuiltin {
+			command.Execute(command.Args)
 			continue
 		}
 
 		// execute non-builtin command
-		result := fmt.Sprintf("%s: command not found\n", command.name)
+		result := fmt.Sprintf("%s: command not found\n", command.Name)
 		writeToStderr(result)
 	}
 }
