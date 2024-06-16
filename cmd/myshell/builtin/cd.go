@@ -13,19 +13,19 @@ func executeCdCommand(args []string) {
 		return
 	}
 
-	nextDir := args[0]
-	isRelativePath := rune(nextDir[0]) == '.'
+	targetDir := args[0]
+	isRelativePath := rune(targetDir[0]) == '.'
 	if isRelativePath {
-		nextDir = filepath.Join(env.SessionEnv.Pwd, nextDir)
+		targetDir = filepath.Join(env.SessionEnv.Pwd, targetDir)
 	}
 
-	_, err := os.Stat(nextDir)
+	_, err := os.Stat(targetDir)
 	if err != nil {
-		msg := fmt.Sprintf("cd: %s: No such file or directory\n", nextDir)
+		msg := fmt.Sprintf("cd: %s: No such file or directory\n", targetDir)
 		fmt.Fprint(os.Stderr, msg)
 	}
 
-	err = env.SessionEnv.SetEnv(env.PWD, nextDir)
+	err = env.SessionEnv.SetEnv(env.PWD, targetDir)
 	if err != nil {
 		panic(err)
 	}
