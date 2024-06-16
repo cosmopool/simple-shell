@@ -50,7 +50,7 @@ func GetBuiltinCommands() [3]string {
 	return [...]string{"exit", "echo", "type"}
 }
 
-func getCommandPath(command Command) (string, error) {
+func GetCommandPath(command Command) (string, error) {
 	var pathToCommand string
 
 	for _, basePath := range env.SessionEnv.Path {

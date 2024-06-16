@@ -26,7 +26,7 @@ func executeTypeCommand(args []string) {
 	}
 
 	// check non-builtin command
-	commandPath, err := getCommandPath(Command{Name: commandToCheck})
+	commandPath, err := GetCommandPath(Command{Name: commandToCheck})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, commandToCheck+": not found")
 		return
