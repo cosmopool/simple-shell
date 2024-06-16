@@ -38,6 +38,9 @@ func GetCommandFromInput(input string) Command {
 	case "pwd":
 		builtinFunction = executePwdCommand
 		isBuiltin = true
+	case "cd":
+		builtinFunction = executeCdCommand
+		isBuiltin = true
 	}
 
 	return Command{
@@ -49,8 +52,8 @@ func GetCommandFromInput(input string) Command {
 }
 
 // List of all builtin commands
-func GetBuiltinCommands() [4]string {
-	return [...]string{"exit", "echo", "type", "pwd"}
+func GetBuiltinCommands() [5]string {
+	return [...]string{"exit", "echo", "type", "pwd", "cd"}
 }
 
 func GetCommandPath(command Command) (string, error) {
