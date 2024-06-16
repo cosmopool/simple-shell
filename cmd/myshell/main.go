@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"os/exec"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/builtin"
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/env"
@@ -29,7 +30,19 @@ func main() {
 		}
 
 		// execute non-builtin command
-		result := fmt.Sprintf("%s: command not found\n", command.Name)
-		writeToStderr(result)
+		commandPath, err := builtin.GetCommandPath(command)
+		if err != nil {
+			result := fmt.Sprintf("%s: command not found\n", command.Name)
+			writeToStderr(result)
+			continue
+		}
+
+		cmd := exec.Command(commandPath, command.Args...)
+		cmd.Stdout = os.Stdout
+
+		err = cmd.Run()
+		if err != nil {
+			writeToStderr(err.Error())
+		}
 	}
 }
