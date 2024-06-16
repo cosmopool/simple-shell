@@ -1,6 +1,9 @@
 package main
 
-import "strings"
+import (
+	"os"
+	"strings"
+)
 
 type BuiltinCommandFunction func(args []string)
 
@@ -42,4 +45,20 @@ func getCommandFromInput(input string) Command {
 
 func getBuiltinCommands() [3]string {
 	return [...]string{"exit", "echo", "type"}
+}
+
+func getCommandPath(command Command) (string, error) {
+	var pathToCommand string
+
+	for _, basePath := range environment.path {
+		pathToCommand = basePath + string(os.PathSeparator) + command.name
+
+		_, err := os.Stat(pathToCommand)
+		if err != nil {
+			continue
+		}
+
+		return pathToCommand, nil
+	}
+	return "", os.ErrNotExist
 }
