@@ -3,6 +3,7 @@ package builtin
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/codecrafters-io/shell-starter-go/cmd/myshell/env"
 )
@@ -13,6 +14,11 @@ func executeCdCommand(args []string) {
 	}
 
 	nextDir := args[0]
+	isRelativePath := rune(nextDir[0]) == '.'
+	if isRelativePath {
+		nextDir = filepath.Join(env.SessionEnv.Pwd, nextDir)
+	}
+
 	_, err := os.Stat(nextDir)
 	if err != nil {
 		msg := fmt.Sprintf("cd: %s: No such file or directory\n", nextDir)
