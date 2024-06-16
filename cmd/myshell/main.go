@@ -11,9 +11,13 @@ func getBuiltinCommands() [3]string {
 	return [...]string{"exit", "echo", "type"}
 }
 
+type BuiltinCommandFunction func(args []string)
+
 type Command struct {
-	name string
-	args []string
+	name      string
+	args      []string
+	isBuiltin bool
+	execute   BuiltinCommandFunction
 }
 
 func writeToStderr(errorString string) {
@@ -31,9 +35,25 @@ func getCommandFromInput(input string) Command {
 	name := allArguments[0]
 	args := allArguments[1:]
 
+	isBuiltin := false
+	var builtinFunction BuiltinCommandFunction
+	switch name {
+	case "exit":
+		builtinFunction = executeExitCommand
+		isBuiltin = true
+	case "echo":
+		builtinFunction = executeEchoCommand
+		isBuiltin = true
+	case "type":
+		builtinFunction = executeTypeCommand
+		isBuiltin = true
+	}
+
 	return Command{
-		name: name,
-		args: args,
+		name:      name,
+		args:      args,
+		isBuiltin: isBuiltin,
+		execute:   builtinFunction,
 	}
 }
 
@@ -48,14 +68,9 @@ func main() {
 		}
 
 		command := getCommandFromInput(rawInput)
-		switch command.name {
-		case "exit":
-			executeExitCommand(command.args)
-		case "echo":
-			executeEchoCommand(command.args)
-		case "type":
-			executeTypeCommand(command.args)
-		default:
+		if command.isBuiltin {
+			command.execute(command.args)
+		} else {
 			result := fmt.Sprintf("%s: command not found\n", command.name)
 			writeToStderr(result)
 		}
