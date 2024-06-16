@@ -1,6 +1,11 @@
 package main
 
-import "strings"
+import (
+	"errors"
+	"fmt"
+	"os"
+	"strings"
+)
 
 type BuiltinCommandFunction func(args []string)
 
@@ -42,4 +47,21 @@ func getCommandFromInput(input string) Command {
 
 func getBuiltinCommands() [3]string {
 	return [...]string{"exit", "echo", "type"}
+}
+
+func getCommandPath(command Command) (string, error) {
+	var pathToCommand string
+
+	for _, basePath := range environment.path {
+		pathToCommand = basePath + command.name
+
+		_, err := os.Stat(pathToCommand)
+		if err == os.ErrNotExist {
+			return "", fmt.Errorf("%s: not found", command.name)
+		} else if err != nil {
+			return "", err
+		}
+	}
+
+	return pathToCommand, nil
 }

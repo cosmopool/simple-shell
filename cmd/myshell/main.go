@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	setEnvironment()
 	for {
 		writeToStdout("$ ")
 		// wait for user input
