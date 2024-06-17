@@ -14,6 +14,11 @@ func executeCdCommand(args []string) {
 	}
 
 	targetDir := args[0]
+	isHomeDir := rune(targetDir[0]) == '~'
+	if isHomeDir {
+		targetDir = env.SessionEnv.Home
+	}
+
 	isRelativePath := rune(targetDir[0]) == '.'
 	if isRelativePath {
 		targetDir = filepath.Join(env.SessionEnv.Pwd, targetDir)
